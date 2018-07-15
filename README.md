@@ -190,8 +190,7 @@ curl -X POST \
 #### Performance:
 
 The time complexity to find the number of hops per a url is unfortunately O(n^2) at its worst, O(n) otherwise. When clicking the first
-link on every wiki page, I discovered certian links would lead to circular loops.  In order to counter this problem, I implemented a set
-to jump to the next link on the page, if we had already visited a link in the past.
+link on every wiki page, I discovered certian links would lead to circular loops.  In order to counter this problem, I implemented a set, so that we could keep track and skip links we had already visited in the past when scanning a wiki page.
 
 Currently we are running one instance of the app in Heroku. The app relies on an internal memory key value store (Concurrent HashMap). 
 The look up time for finding a url and its hops is O(1), once the url and its paths are stored in the key value database. The url acts as they key in the hash and the hops as the value. 
