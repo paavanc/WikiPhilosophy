@@ -36,7 +36,7 @@ public class WikiPathManagerImpl implements WikiPathManager {
 	 */
 	private void initValidate(WikiPathRequest wp) {
 
-		if (wp == null || ApiUtils.isValidWikiUrl(wp.getUrl())) {
+		if (wp == null || !ApiUtils.isValidWikiUrl(wp.getUrl())) {
 			throw new WikiException(ExceptionConstants.INVALID_URL);
 		}
 	}
@@ -94,10 +94,15 @@ public class WikiPathManagerImpl implements WikiPathManager {
 		String url = wp.getUrl();
 		int counter = 0;
 		boolean flag = true;
-		List<String> urlList = new ArrayList<>();
+		Set<String> urlList = new HashSet<>();
 		while (flag) {
-			if (counter != 0) {
+			if (counter >0) {
 				url = getLink(url);
+				System.out.println("url: "+url + " counter: "+counter);
+				if (urlList.contains(url)) {
+					throw new WikiException(ExceptionConstants.DUPLICATES);
+
+				}
 				urlList.add(url);
 			}
 			if (url == null || url.isEmpty() || counter > Constants.MAX_HOP) {
