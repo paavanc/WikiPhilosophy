@@ -192,6 +192,8 @@ curl -X POST \
 The time complexity to find the number of hops per a url is unfortunately O(n^2) at its worst, O(n) otherwise. When clicking the first
 link on every wiki page, I discovered certian links would lead to circular loops.  In order to counter this problem, I implemented a set, so that we could keep track and skip links we had already visited in the past when scanning a wiki page.
 
+Note, when a succesful API call is made we recieve a 200 Http status code, because we are not always inserting a record in the database, if one already exists.
+
 Currently we are running one instance of the app in Heroku. The app relies on an internal memory key value store (Concurrent HashMap). 
 The look up time for finding a url and its hops is O(1), once the url and its paths are stored in the key value database. The url acts as they key in the hash and the hops as the value. 
 However, there are pitfalls with this approach. One of them is that the in memory database goes down (clears out) everytime the service goes down or is put to sleep by Heroku.
@@ -203,4 +205,5 @@ I would also increase the number of replicas on each on node depending on the tr
 #### Important Files:
 
 * /src/main/java/wiki/link/hop - controllers, managers, repositories
+* /src/main/java/wiki/link/hop/manager/impl/WikiPathManagerImpl.java - main logic
 * /src/test/java/wiki/link/hop/HopApplicationTests.java - integration tests
