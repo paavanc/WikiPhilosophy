@@ -50,7 +50,7 @@ curl -X POST \
 }'
 ```
 
-#### Sample Respons:
+#### Sample Response:
 ```
 {
     "url": "https://en.wikipedia.org/wiki/One_Piece",
