@@ -31,6 +31,7 @@ public class HopApplicationTests {
 	private static final String WIKI_URI = "/wiki";
 	private static final String INPUT = "https://en.wikipedia.org/wiki/Infinity_Online";
 	private static final String FINAL_HOP = "https://en.wikipedia.org/wiki/philosophy";
+	private static final String NOT_FOUND = "https://en.wikipedia.org/wiki/Paavan";
 
 	@Test
 	public void testCreate() throws IOException, Exception {
@@ -48,6 +49,13 @@ public class HopApplicationTests {
 		mvc.perform(MockMvcRequestBuilders.post(WIKI_URI).contentType(MediaType.APPLICATION_JSON)
 				.content(ApiUtils.toJson(new WikiPath("will fail"))))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn();
+	}
+
+	@Test
+	public void testNotFound() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.post(WIKI_URI).contentType(MediaType.APPLICATION_JSON)
+				.content(ApiUtils.toJson(new WikiPath(NOT_FOUND))))
+				.andExpect(MockMvcResultMatchers.status().isNotFound()).andReturn();
 	}
 
 }
