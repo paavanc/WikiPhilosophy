@@ -2,9 +2,7 @@ package wiki.link.hop.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.keyvalue.annotation.KeySpace;
@@ -26,6 +24,10 @@ public class WikiPath implements Serializable {
 
 	public WikiPath() {
 
+	}
+
+	public WikiPath(String url) {
+		this.url = url;
 	}
 
 	public WikiPath(String url, List<String> hops) {

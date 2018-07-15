@@ -3,7 +3,6 @@ package wiki.link.hop.manager.impl;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +60,7 @@ public class WikiPathManagerImpl implements WikiPathManager {
 		return wikiPathRepository.save(findPaths(wp));
 	}
 
-	private String getLink(String url, List<String> urlList) {
+	private String getLink(String url, Set<String> urlList) {
 
 		try {
 			URL urlLink = new URL(url);
@@ -92,15 +91,12 @@ public class WikiPathManagerImpl implements WikiPathManager {
 		int counter = 0;
 		boolean flag = true;
 		List<String> urlList = new ArrayList<>();
+		Set<String> urSet = new HashSet<>();
 		while (flag) {
 			if (counter > 0) {
-				url = getLink(url, urlList);
-				System.out.println("url: " + url + " counter: " + counter);
-				if (urlList.contains(url)) {
-					throw new WikiException(ExceptionConstants.DUPLICATES);
-
-				}
+				url = getLink(url, urSet);
 				urlList.add(url);
+				urSet.add(url);
 			}
 			if (url == null || url.isEmpty() || counter > Constants.MAX_HOP) {
 				throw new WikiException(ExceptionConstants.NOT_FOUND, HttpStatus.NOT_FOUND);
