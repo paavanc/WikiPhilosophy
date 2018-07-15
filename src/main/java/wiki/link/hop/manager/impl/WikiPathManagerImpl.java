@@ -61,7 +61,7 @@ public class WikiPathManagerImpl implements WikiPathManager {
 		return wikiPathRepository.save(findPaths(wp));
 	}
 
-	private String getLink(String url) {
+	private String getLink(String url, List<String> urlList) {
 
 		try {
 			URL urlLink = new URL(url);
@@ -70,9 +70,9 @@ public class WikiPathManagerImpl implements WikiPathManager {
 
 			for (int i = 0; i < links.size(); i++) {
 				url = links.get(i).toString();
-				if (isValidLink(url)) {
-					url = links.get(i).toString();
-					return Constants.WIKI_URL + url.substring(9, url.indexOf("\"", 10));
+				String procUrl = Constants.WIKI_URL + url.substring(9, url.indexOf("\"", 10));
+				if (isValidLink(url) && !urlList.contains(procUrl)) {
+					return procUrl;
 				}
 			}
 			return null;
@@ -82,23 +82,20 @@ public class WikiPathManagerImpl implements WikiPathManager {
 	}
 
 	private boolean isValidLink(String url) {
-		Set<String> invalidLinks = new HashSet<String>(Arrays.asList("greek", "wiktionary", "latin"));
-		boolean flag = false;
-		for (String s : invalidLinks) {
-			flag = url.toLowerCase().contains(s);
-		}
-		return !flag && url.toLowerCase().contains(Constants.WIKI);
+		url = url.toLowerCase();
+		return !url.contains("latin") && !url.contains("greek") && url.contains("wiki") && !url.contains("wiktionary");
+
 	}
 
 	private WikiPath findPaths(WikiPathRequest wp) {
 		String url = wp.getUrl();
 		int counter = 0;
 		boolean flag = true;
-		Set<String> urlList = new HashSet<>();
+		List<String> urlList = new ArrayList<>();
 		while (flag) {
-			if (counter >0) {
-				url = getLink(url);
-				System.out.println("url: "+url + " counter: "+counter);
+			if (counter > 0) {
+				url = getLink(url, urlList);
+				System.out.println("url: " + url + " counter: " + counter);
 				if (urlList.contains(url)) {
 					throw new WikiException(ExceptionConstants.DUPLICATES);
 

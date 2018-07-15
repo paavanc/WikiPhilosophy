@@ -22,22 +22,22 @@ public class WikiPath implements Serializable {
 
 	@Id
 	String url;
-	Set<String> hops = new HashSet<>();
+	List<String> hops = new ArrayList<>();
 
 	public WikiPath() {
 
 	}
 
-	public WikiPath(String url, Set<String> hops) {
+	public WikiPath(String url, List<String> hops) {
 		this.url = url;
 		this.hops = hops;
 	}
 
-	public Set<String> getHops() {
+	public List<String> getHops() {
 		return hops;
 	}
 
-	public void setHops(Set<String> hops) {
+	public void setHops(List<String> hops) {
 		this.hops = hops;
 	}
 
